@@ -17,10 +17,10 @@ public class Solution {
         Scanner sc = new Scanner(System.in);
         FileInputStream fileInputStream = new FileInputStream(sc.next());
         FileOutputStream fileOutputStream = new FileOutputStream(sc.next());
-        int data;
+
         byte[] count = new byte[fileInputStream.available()];
         while (fileInputStream.available()>0){
-            data = fileInputStream.read(count);
+            fileInputStream.read(count);
             }
         for (int i = count.length - 1; i >= 0; i--)
         {
