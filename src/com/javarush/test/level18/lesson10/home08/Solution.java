@@ -16,33 +16,57 @@ import java.util.Scanner;
 Закрыть потоки. Не использовать try-with-resources
 */
 
-public class Solution {
+public class Solution
+{
     public static Map<String, Integer> resultMap = new HashMap<String, Integer>();
 
     public static void main(String[] args) throws IOException
     {
         Scanner sc = new Scanner(System.in);
-        while (true){
-            String name= sc.next();
-            if (name.equals("exit"))break;
-            new ReadThread(name);
+        while (true)
+        {
+            String name = sc.next();
+            if (name.equals("exit")) break;
+            new ReadThread(name).start();
         }
 
     }
 
-    public static class ReadThread extends Thread {
+    public static class ReadThread extends Thread
+    {
         public ReadThread(String fileName) throws IOException
         {
-            this.fileName=fileName;
+            this.fileName = fileName;
             //implement constructor body
         }
+
         String fileName;
-        FileInputStream inputStream = new FileInputStream(new File(fileName));
-        Map<Byte, Integer> byteIntegerMap= new HashMap<Byte, Integer>();
-        while (inputStream.available()>0){
-            byte bt = (byte)inputStream.read();
-            if(byteIntegerMap.containsKey(bt))byteIntegerMap.put(bt, (byteIntegerMap.get(bt))+1);
-            else byteIntegerMap.put(bt, 0);
+        public void run()
+        {
+            FileInputStream inputStream = null;
+            try
+            {
+                inputStream = new FileInputStream(new File(fileName));
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+            Map<Byte, Integer> byteIntegerMap = new HashMap<Byte, Integer>();
+            try
+            {
+                while (inputStream.available() > 0)
+
+                {
+                    byte bt = (byte) inputStream.read();
+                    if (byteIntegerMap.containsKey(bt)) byteIntegerMap.put(bt, (byteIntegerMap.get(bt)) + 1);
+                    else byteIntegerMap.put(bt, 0);
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
         // implement file reading here - реализуйте чтение из файла тут
     }
