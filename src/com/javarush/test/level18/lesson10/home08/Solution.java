@@ -52,16 +52,37 @@ public class Solution
             {
                 e.printStackTrace();
             }
-            Map<Byte, Integer> byteIntegerMap = new HashMap<Byte, Integer>();
+            Map<Integer, Integer> byteIntegerMap = new HashMap<Integer, Integer>();
             try
             {
                 while (inputStream.available() > 0)
 
                 {
-                    byte bt = (byte) inputStream.read();
+                    int bt = inputStream.read();
                     if (byteIntegerMap.containsKey(bt)) byteIntegerMap.put(bt, (byteIntegerMap.get(bt)) + 1);
                     else byteIntegerMap.put(bt, 0);
                 }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            int x =0;
+            int y = 0;
+
+            for (Map.Entry<Integer, Integer> pair : byteIntegerMap.entrySet()){
+                if (pair.getValue()>y)
+                {
+                    y = pair.getValue();
+                    x = pair.getKey();
+
+                }
+
+            }
+            resultMap.put(fileName, x);
+            try
+            {
+                inputStream.close();
             }
             catch (IOException e)
             {
