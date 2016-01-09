@@ -8,7 +8,37 @@ package com.javarush.test.level18.lesson10.home09;
 Не используйте System.exit();
 */
 
-public class Solution {
-    public static void main(String[] args) {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Solution
+{
+    public static void main(String[] args)
+    {
+
+
+        Scanner sc = new Scanner(System.in);
+
+        while (true)
+        {
+            String fileName = sc.next();
+            File file= new File(fileName);
+            if (!file.exists()){
+                try
+                {
+                    throw new FileNotFoundException();
+                }
+                catch (FileNotFoundException e)
+                {
+                    System.out.println(fileName);
+                    break;
+
+                }
+            }
+
+
+        }
+        sc.close();
     }
 }
