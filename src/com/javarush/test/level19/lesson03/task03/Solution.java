@@ -17,9 +17,53 @@ import java.util.Map;
 public class Solution {
     public static Map<String, String> countries = new HashMap<String, String>();
 
-    public static class IncomeDataAdapter {
+    static {
+        countries.put("UA", "Ukraine");
+        countries.put("RU","Russia" );
+        countries.put("CA","Canada" );
     }
 
+    public static class IncomeDataAdapter implements Customer, Contact {
+        IncomeData incomeData;
+
+        public IncomeDataAdapter(IncomeData incomeData)
+        {
+            this.incomeData = incomeData;
+        }
+
+
+        @Override
+        public String getName()
+        {
+            return incomeData.getContactLastName()+", "+incomeData.getContactFirstName();
+        }
+
+        @Override
+        public String getPhoneNumber()
+        {
+            String phone =""+incomeData.getPhoneNumber();
+
+            if (phone.length()<10){
+                for (int i=0;i<10-phone.length();){
+                    phone="0"+phone;
+                }
+            }
+
+            return "+"+incomeData.getCountryPhoneCode()+"("+phone.substring(0,3)+")"+phone.substring(3,6)+"-"+phone.substring(6,8)+"-"+phone.substring(8);
+        }
+
+        @Override
+        public String getCompanyName()
+        {
+            return incomeData.getCompany();
+        }
+
+        @Override
+        public String getCountryName()
+        {
+            return countries.get(incomeData.getCountryCode());
+        }
+    }
     public static interface IncomeData {
         String getCountryCode();        //example UA
 
@@ -44,5 +88,6 @@ public class Solution {
         String getName();               //example Ivanov, Ivan
 
         String getPhoneNumber();        //example +38(050)123-45-67
+
     }
 }
