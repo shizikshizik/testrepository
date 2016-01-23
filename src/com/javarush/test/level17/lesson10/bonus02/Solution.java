@@ -1,8 +1,11 @@
 package com.javarush.test.level17.lesson10.bonus02;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /* CRUD 2
 CrUD Batch - multiple Creation, Updates, Deletion
@@ -30,14 +33,79 @@ id соответствует индексу в списке
 Используйте Locale.ENGLISH в качестве второго параметра для SimpleDateFormat
 */
 
-public class Solution {
+public class Solution
+{
     public static List<Person> allPeople = new ArrayList<Person>();
-    static {
+
+    static
+    {
         allPeople.add(Person.createMale("Иванов Иван", new Date()));  //сегодня родился    id=0
         allPeople.add(Person.createMale("Петров Петр", new Date()));  //сегодня родился    id=1
     }
 
-    public static void main(String[] args) {
-        //start here - начни тут
+    public static void main(String[] args) throws ParseException
+    {
+        synchronized (allPeople)
+        {
+            if (args[0].equals("-c"))
+            {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                int x = (args.length - 1) / 3;
+                for (int i = 0; i < x; i++)
+                {
+                    if (args[2 + x * i].equals("м"))
+                    {
+
+                        allPeople.add(Person.createMale(args[1 + x * i], simpleDateFormat.parse(args[3 + x * i])));
+
+                    } else
+                        allPeople.add(Person.createFemale(args[1 + x * i], simpleDateFormat.parse(args[3 + x * i])));
+                }
+            }
+            if (args[0].equals("-u"))
+            {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                int x = (args.length - 1) / 4;
+                for (int i = 0; i < x; i++)
+                {
+                    if (args[3 + x * i].equals("м"))
+                    {
+                        allPeople.set(Integer.parseInt(args[1 + x * i]), Person.createMale(args[2 + x * i], simpleDateFormat.parse(args[4 + x * i])));
+
+                    } else
+                        allPeople.set(Integer.parseInt(args[1 + x * i]), Person.createFemale(args[2 + x * i], simpleDateFormat.parse(args[4 + x * i])));
+
+                }
+
+            }
+            if (args[0].equals("-d"))
+            {
+                int x = (args.length - 1);
+                for (int i = 1; i < x; i++)
+                {
+                    allPeople.set(Integer.parseInt(args[i]), null);
+
+                }
+
+            }
+            if (args[0].equals("-i"))
+            {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+                int x = (args.length - 1);
+                for (int i = 1; i < x; i++)
+                {
+                    Person person = allPeople.get(Integer.parseInt(args[i]));
+                    System.out.println(person.getName() + " " + person.getSex() + " " + simpleDateFormat.format(person.getBirthDay()));
+
+                }
+
+            }
+
+
+        }
+
+
     }
 }
+
